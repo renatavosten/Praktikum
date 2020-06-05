@@ -46,9 +46,10 @@
     function next_generation() { 
 
         for (var col = 1; col < width - 1; col++) { 
-            for (var row = 1; row < height - 1; row++) { 
+            for (var row = 1; row < height - 1; row++) {
+                let count_neighbors = grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]; 
                 if (grid[col][row] === 0) {
-                    switch (grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]) {
+                    switch (count_neighbors) {
                         case 1:
                         case 2:
                             mirrorGrid[col][row] = 0; 
@@ -66,7 +67,7 @@
                             mirrorGrid[col][row] = 0; 
                     }
                 } if (grid[col][row] === 1) {
-                    switch (grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]) {
+                    switch (count_neighbors) {
                         case 0:
                         case 1:
                             mirrorGrid[col][row] = 0;
