@@ -1,0 +1,113 @@
+<script>
+    var width = 400;
+    var height = 400;
+    var grid = createArray(height);
+    for (var i = 0; i < 400; i++) {
+        grid[i] = [];
+    }
+    var mirrorGrid = createArray(height);
+    
+    for (var col = 0; col < width; col++) { 
+        for (var row = 0; row < height; row++) { 
+            var random = Math.random(); 
+            var random_num = (random * 2);
+            var random_bin = Math.floor(random_num);
+            if (random_bin === 1) {
+                grid[col][row] = 1;
+            } else {
+                grid[col][row] = 0;
+            }
+        }
+    }
+    
+     
+    function game() {
+        var canvas = document.getElementById("myCanvas");
+        var CanvasContext = canvas.getContext("2d");
+        CanvasContext.clearRect(0, 0, 400, 400);
+        for (var col = 1; col < width; col++) { 
+            for (var row = 1; row < height; row++) { 
+                if (grid[col][row] === 1) {
+                    CanvasContext.fillStyle = "#FF0000";
+                    CanvasContext.fillRect(col, row, 1, 1);
+                }
+            }
+        }
+        animation();
+        requestAnimationFrame(game);
+    }
+    
+    function createArray(rows) {
+        var arr = [];
+        for (var i = 0; i < rows; i++) {
+            arr[i] = [];
+        }
+        return arr;
+    }
+    
+    function animation() { 
+        for (var col = 1; col < width - 1; col++) { 
+            for (var row = 1; row < height - 1; row++) { 
+                if (grid[col][row] === 0) {
+                    switch (grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]) {
+                        case 1:
+                        case 2:
+                            mirrorGrid[col][row] = 0; 
+                            break;
+                        case 3:
+                            mirrorGrid[col][row] = 1; 
+                            break;
+                        case 4:
+                            mirrorGrid[col][row] = 1;
+                            break;
+                        case 5:
+                            mirrorGrid[col][row] = !(mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            break;
+                        default:
+                            mirrorGrid[col][row] = 0; 
+                    }
+                } else if (grid[col][row] === 1) {
+                    switch (grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]) {
+                        case 0:
+                        case 1:
+                            mirrorGrid[col][row] = (mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            break;
+                        case 2:
+                            mirrorGrid[col][row] = (mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            break;
+                        case 3:
+                            mirrorGrid[col][row] = 1;
+                            break;
+                        case 4:
+                        case 5:
+                            mirrorGrid[col][row] = (mirrorGrid[col][row] & !mirrorGrid[col][row]);
+                            break;
+                        case 6:
+                        case 7:
+                        case 8:
+                            mirrorGrid[col][row] = 0;
+                            break;
+                        default:
+                            mirrorGrid[col][row] = 0;
+              
+                    }
+    
+                }
+            }
+        }
+    
+        for (var col = 0; col < width; col++) {
+            for (var row = 0; row < height; row++) {
+                grid[col][row] = mirrorGrid[col][row];
+    
+            }
+        }
+    
+    
+    }
+    </script>
+    <html>
+        <body onload="game()">
+            <canvas id="myCanvas" width="400" height="400"></canvas>
+        </body>
+    </html>
