@@ -1,11 +1,11 @@
 <script>
-    var width = 400;
-    var height = 400;
-    var grid = createArray(height);
+    const width = 400;
+    const height = 400;
+    var grid = createGrid(height);
     for (var i = 0; i < 400; i++) {
         grid[i] = [];
     }
-    var mirrorGrid = createArray(height);
+    var mirrorGrid = createGrid(height);
     
     for (var col = 0; col < width; col++) { 
         for (var row = 0; row < height; row++) { 
@@ -33,19 +33,20 @@
                 }
             }
         }
-        animation();
+        next_generation();
         requestAnimationFrame(game);
     }
     
-    function createArray(rows) {
+    function createGrid(rows_num) {
         var arr = [];
-        for (var i = 0; i < rows; i++) {
+        for (var i = 0; i < rows_num; i++) {
             arr[i] = [];
         }
         return arr;
     }
     
-    function animation() { 
+    function next_generation() { 
+
         for (var col = 1; col < width - 1; col++) { 
             for (var row = 1; row < height - 1; row++) { 
                 if (grid[col][row] === 0) {
@@ -61,26 +62,26 @@
                             mirrorGrid[col][row] = 1;
                             break;
                         case 5:
-                            mirrorGrid[col][row] = !(mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            mirrorGrid[col][row] = 0;
                             break;
                         default:
                             mirrorGrid[col][row] = 0; 
                     }
-                } else if (grid[col][row] === 1) {
+                } if (grid[col][row] === 1) {
                     switch (grid[col - 1][row - 1] + grid[col - 1][row] + grid[col - 1][row + 1] + grid[col][row - 1] + grid[col][row + 1] + grid[col + 1][row - 1] + grid[col + 1][row] + grid[col + 1][row + 1]) {
                         case 0:
                         case 1:
-                            mirrorGrid[col][row] = (mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            mirrorGrid[col][row] = 0;
                             break;
                         case 2:
-                            mirrorGrid[col][row] = (mirrorGrid[col][row] | !mirrorGrid[col][row]);
+                            mirrorGrid[col][row] = 1;
                             break;
                         case 3:
                             mirrorGrid[col][row] = 1;
                             break;
                         case 4:
                         case 5:
-                            mirrorGrid[col][row] = (mirrorGrid[col][row] & !mirrorGrid[col][row]);
+                            mirrorGrid[col][row] = 0;
                             break;
                         case 6:
                         case 7:
